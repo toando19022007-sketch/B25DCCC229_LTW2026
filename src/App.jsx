@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-// Component con hiển thị từng dòng sinh viên
 const StudentItem = ({ student, onDelete }) => {
   const { id, name, score, class: className } = student;
 
@@ -17,7 +16,6 @@ const StudentItem = ({ student, onDelete }) => {
   );
 };
 
-// Component con hiển thị bảng danh sách sinh viên
 const StudentList = ({ students, onDelete }) => {
   return (
     <table
@@ -43,7 +41,6 @@ const StudentList = ({ students, onDelete }) => {
   );
 };
 
-// Component cha quản lý state chính
 const App = () => {
   const [students, setStudents] = useState([
     { id: 1, name: "Nguyễn Văn A", score: 8.5, class: "D21CQCN01" },
@@ -57,7 +54,6 @@ const App = () => {
   const [filter, setFilter] = useState("ALL");
   const [error, setError] = useState("");
 
-  // Thêm sinh viên mới
   const handleAddStudent = (e) => {
     e.preventDefault();
     const parsedScore = parseFloat(score);
@@ -72,7 +68,8 @@ const App = () => {
     }
 
     const newStudent = {
-      id: Date.now(),
+      id:
+        students.length > 0 ? Number(students[students.length - 1].id) + 1 : 1,
       name: name.trim(),
       score: parsedScore,
       class: studentClass.trim(),
@@ -85,19 +82,16 @@ const App = () => {
     setError("");
   };
 
-  // Xóa sinh viên
   const handleDeleteStudent = (id) => {
     setStudents(students.filter((s) => s.id !== id));
   };
 
-  // Lọc danh sách sinh viên
   const filteredStudents = students.filter((s) => {
     if (filter === "GIOI") return s.score >= 8;
     if (filter === "TRUOT") return s.score < 5;
     return true;
   });
 
-  // Tính điểm trung bình toàn lớp
   const avgScore =
     students.length > 0
       ? (
@@ -114,7 +108,7 @@ const App = () => {
         fontFamily: "Arial",
       }}
     >
-      <h2>Quản lý Điểm Sinh viên</h2>
+      <h2>Ứng dụng Quản lý Điểm Sinh viên</h2>
 
       {/* Form nhập liệu thêm sinh viên */}
       <form
@@ -149,7 +143,7 @@ const App = () => {
       </form>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      {/* Các nút lọc (Filter) */}
+      {/* Các nút chức năng Lọc (Filter) */}
       <div style={{ marginBottom: "15px", display: "flex", gap: "10px" }}>
         <button onClick={() => setFilter("ALL")}>Tất cả</button>
         <button onClick={() => setFilter("GIOI")}>
@@ -160,7 +154,7 @@ const App = () => {
         </button>
       </div>
 
-      {/* Thống kê cơ bản */}
+      {/* Thống kê cơ bản của lớp */}
       <div
         style={{
           marginBottom: "15px",
@@ -177,7 +171,7 @@ const App = () => {
         </p>
       </div>
 
-      {/* Danh sách hiển thị */}
+      {/* Danh sách hiển thị sinh viên */}
       <StudentList students={filteredStudents} onDelete={handleDeleteStudent} />
     </div>
   );
